@@ -6,7 +6,7 @@ using System.IO;
 using System.Xml;
 using Microsoft.Net.Http.Headers;
 
-namespace Microsoft.AspNet.Mvc
+namespace Microsoft.AspNet.Mvc.Xml
 {
     /// <summary>
     /// Abstract base class from which all XML Output Formatters derive from.
@@ -42,11 +42,11 @@ namespace Microsoft.AspNet.Mvc
             {
                 if (runtimeType != null)
                 {
-                    return runtimeType;
+                    return GetSerializableErrorType(runtimeType);
                 }
             }
 
-            return declaredType;
+            return GetSerializableErrorType(declaredType);
         }
 
         /// <summary>
@@ -72,6 +72,28 @@ namespace Microsoft.AspNet.Mvc
                                                  [NotNull] XmlWriterSettings xmlWriterSettings)
         {
             return XmlWriter.Create(writeStream, xmlWriterSettings);
+        }
+
+        private Type GetSerializableErrorType(Type type)
+        {
+            if (type == Constants.SerializableErrorType)
+            {
+                return Constants.SerializableErrorWrapperType;
+            }
+
+            return type;
+        }
+
+        internal object GetWrappedSerializableErrorObject(object obj)
+        {
+            var serializableError = obj as SerializableError;
+
+            if(serializableError == null)
+            {
+                return obj;
+            }
+
+            return new SerializableErrorWrapper(serializableError);
         }
     }
 }

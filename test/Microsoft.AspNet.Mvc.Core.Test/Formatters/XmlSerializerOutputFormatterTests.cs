@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNet.Http;
 using Microsoft.AspNet.Http.Core.Collections;
 using Microsoft.Net.Http.Headers;
+using Microsoft.AspNet.Mvc.Xml;
 using Moq;
 using Xunit;
 
@@ -207,6 +208,28 @@ namespace Microsoft.AspNet.Mvc.Core
             // Assert
             Assert.NotNull(outputFormatterContext.ActionContext.HttpContext.Response.Body);
             Assert.True(outputFormatterContext.ActionContext.HttpContext.Response.Body.CanRead);
+        }
+
+        [Fact]
+        public async Task WritesSerializableErrorXml()
+        {
+            // Arrange
+            var serializableError = new SerializableError();
+            serializableError.Add("key1", "Test Error 1 Test Error 2");
+            serializableError.Add("key2", "Test Error 3");
+            var expectedXml = "<Error><key1>Test Error 1 Test Error 2</key1><key2>Test Error 3</key2></Error>";
+            var formatter = new XmlSerializerOutputFormatter();
+            var outputFormatterContext = GetOutputFormatterContext(serializableError, typeof(SerializableError));
+
+            // Act
+            await formatter.WriteAsync(outputFormatterContext);
+
+            // Assert
+            Assert.NotNull(outputFormatterContext.ActionContext.HttpContext.Response.Body);
+            outputFormatterContext.ActionContext.HttpContext.Response.Body.Position = 0;
+            var outputString = new StreamReader(outputFormatterContext.ActionContext.HttpContext.Response.Body,
+                Encoding.UTF8).ReadToEnd();
+            Assert.Equal(expectedXml, outputString);
         }
 
         public static IEnumerable<object[]> TypesForCanWriteResult
