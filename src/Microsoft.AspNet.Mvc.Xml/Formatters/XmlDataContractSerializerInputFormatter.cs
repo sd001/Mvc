@@ -106,8 +106,8 @@ namespace Microsoft.AspNet.Mvc.Xml
         /// <returns>The <see cref="XmlObjectSerializer"/> used during deserialization.</returns>
         protected virtual XmlObjectSerializer CreateDataContractSerializer(Type type)
         {
-            // check if the type to which we are deserliazing is of type SerializableError
-            // if yes, then use the SerializableErrorWrapper instead.
+            // Since the type "SerializableError" is not compatible
+            // with the xml serializers, we create a compatible wrapper type for serialization.
             if (type == Constants.SerializableErrorType)
             {
                 type = Constants.SerializableErrorWrapperType;
@@ -137,9 +137,9 @@ namespace Microsoft.AspNet.Mvc.Xml
 
                 var deserializedObject = xmlSerializer.ReadObject(xmlReader);
 
-                // Get the original SerializableError object from the wrapper
+                // Since we expect users to typically bind with SerializableError type,
+                // we should try to unwrap and get the actual SerializableError.
                 var serializableErrorWrapper = deserializedObject as SerializableErrorWrapper;
-
                 if (serializableErrorWrapper != null && type == Constants.SerializableErrorType)
                 {
                     deserializedObject = serializableErrorWrapper.SerializableError;

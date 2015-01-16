@@ -37,6 +37,8 @@ namespace Microsoft.AspNet.Mvc.Xml
         /// <returns>The type of the object to be serialized.</returns>
         protected virtual Type GetSerializableType(Type declaredType, Type runtimeType)
         {
+            // Since the type "SerializableError" is not compatible
+            // with the xml serializers, we create a compatible wrapper type for serialization.
             if (declaredType == null ||
                 declaredType == typeof(object))
             {
@@ -88,7 +90,7 @@ namespace Microsoft.AspNet.Mvc.Xml
         {
             var serializableError = obj as SerializableError;
 
-            if(serializableError == null)
+            if (serializableError == null)
             {
                 return obj;
             }

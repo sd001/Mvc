@@ -7,8 +7,14 @@ namespace Microsoft.AspNet.Mvc.Xml
 {
     internal static class Constants
     {
+        /// <summary>
+        /// Represents the <see cref="SerializableError"/> type object.
+        /// </summary>
         public static readonly Type SerializableErrorType = typeof(SerializableError);
 
+        /// <summary>
+        /// Represents the <see cref="SerializableErrorWrapper"/> type object.
+        /// </summary>
         public static readonly Type SerializableErrorWrapperType = typeof(SerializableErrorWrapper);
     }
 }

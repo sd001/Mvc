@@ -9,7 +9,7 @@ using System.Xml;
 namespace Microsoft.AspNet.Mvc.Xml
 {
     /// <summary>
-    /// Contains methods which are used by input formatters.
+    /// Contains methods which are used by Xml input formatters.
     /// </summary>
     public static class FormattingUtilities
     {
