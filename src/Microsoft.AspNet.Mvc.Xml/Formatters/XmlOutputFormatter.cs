@@ -37,18 +37,22 @@ namespace Microsoft.AspNet.Mvc.Xml
         /// <returns>The type of the object to be serialized.</returns>
         protected virtual Type GetSerializableType(Type declaredType, Type runtimeType)
         {
-            // Since the type "SerializableError" is not compatible
-            // with the xml serializers, we create a compatible wrapper type for serialization.
-            if (declaredType == null ||
-                declaredType == typeof(object))
+            Type type = null;
+
+            if (declaredType == null || declaredType == typeof(object))
             {
                 if (runtimeType != null)
                 {
-                    return GetSerializableErrorType(runtimeType);
+                    type = runtimeType;
                 }
             }
 
-            return GetSerializableErrorType(declaredType);
+            if (type == null)
+            {
+                type = declaredType;
+            }
+
+            return SerializableErrorWrapper.CreateSerializableType(type);
         }
 
         /// <summary>
@@ -74,28 +78,6 @@ namespace Microsoft.AspNet.Mvc.Xml
                                                  [NotNull] XmlWriterSettings xmlWriterSettings)
         {
             return XmlWriter.Create(writeStream, xmlWriterSettings);
-        }
-
-        private Type GetSerializableErrorType(Type type)
-        {
-            if (type == Constants.SerializableErrorType)
-            {
-                return Constants.SerializableErrorWrapperType;
-            }
-
-            return type;
-        }
-
-        internal object GetWrappedSerializableErrorObject(object obj)
-        {
-            var serializableError = obj as SerializableError;
-
-            if (serializableError == null)
-            {
-                return obj;
-            }
-
-            return new SerializableErrorWrapper(serializableError);
         }
     }
 }

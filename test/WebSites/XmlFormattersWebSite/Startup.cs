@@ -29,13 +29,17 @@ namespace XmlFormattersWebSite
 
                         var xmlSerializerInputFormatter = new XmlSerializerInputFormatter();
                         xmlSerializerInputFormatter.SupportedMediaTypes.Clear();
-                        xmlSerializerInputFormatter.SupportedMediaTypes.Add(new MediaTypeHeaderValue("application/xml-xmlser"));
-                        xmlSerializerInputFormatter.SupportedMediaTypes.Add(new MediaTypeHeaderValue("text/xml-xmlser"));
+                        xmlSerializerInputFormatter.SupportedMediaTypes.Add(
+                            new MediaTypeHeaderValue("application/xml-xmlser"));
+                        xmlSerializerInputFormatter.SupportedMediaTypes.Add(
+                            new MediaTypeHeaderValue("text/xml-xmlser"));
 
                         var xmlSerializerOutputFormatter = new XmlSerializerOutputFormatter();
                         xmlSerializerOutputFormatter.SupportedMediaTypes.Clear();
-                        xmlSerializerOutputFormatter.SupportedMediaTypes.Add(new MediaTypeHeaderValue("application/xml-xmlser"));
-                        xmlSerializerOutputFormatter.SupportedMediaTypes.Add(new MediaTypeHeaderValue("text/xml-xmlser"));
+                        xmlSerializerOutputFormatter.SupportedMediaTypes.Add(
+                            new MediaTypeHeaderValue("application/xml-xmlser"));
+                        xmlSerializerOutputFormatter.SupportedMediaTypes.Add(
+                            new MediaTypeHeaderValue("text/xml-xmlser"));
 
                         var dcsInputFormatter = new XmlDataContractSerializerInputFormatter();
                         dcsInputFormatter.SupportedMediaTypes.Clear();

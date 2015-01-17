@@ -106,14 +106,7 @@ namespace Microsoft.AspNet.Mvc.Xml
         /// <returns>The <see cref="XmlSerializer"/> used during deserialization.</returns>
         protected virtual XmlSerializer CreateXmlSerializer(Type type)
         {
-            // Since the type "SerializableError" is not compatible
-            // with the xml serializers, we create a compatible wrapper type for deserialization.
-            if (type == Constants.SerializableErrorType)
-            {
-                type = Constants.SerializableErrorWrapperType;
-            }
-
-            return new XmlSerializer(type);
+            return new XmlSerializer(SerializableErrorWrapper.CreateSerializableType(type));
         }
 
         private object GetDefaultValueForType(Type modelType)
@@ -134,17 +127,8 @@ namespace Microsoft.AspNet.Mvc.Xml
             using (var xmlReader = CreateXmlReader(new DelegatingStream(request.Body)))
             {
                 var xmlSerializer = CreateXmlSerializer(type);
-
                 var deserializedObject = xmlSerializer.Deserialize(xmlReader);
-
-                // Since we expect users to typically bind with SerializableError type,
-                // we should try to unwrap and get the actual SerializableError.
-                var serializableErrorWrapper = deserializedObject as SerializableErrorWrapper;
-                if (serializableErrorWrapper != null && type == Constants.SerializableErrorType)
-                {
-                    deserializedObject = serializableErrorWrapper.SerializableError;
-                }
-
+                deserializedObject = SerializableErrorWrapper.UnwrapSerializableErrorObject(type, deserializedObject);
                 return Task.FromResult(deserializedObject);
             }
         }

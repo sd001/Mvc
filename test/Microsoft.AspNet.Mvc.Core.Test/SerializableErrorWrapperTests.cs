@@ -73,5 +73,30 @@ namespace Microsoft.AspNet.Mvc
             Assert.Equal("Test Error 1 Test Error 2", errors["key1"]);
             Assert.Equal("Test Error 3", errors["key2"]);
         }
+
+        [Fact]
+        public void WriteXml_WritesValidXml()
+        {
+            // Arrange
+            var modelState = new ModelStateDictionary();
+            modelState.AddModelError("key1", "Test Error 1");
+            modelState.AddModelError("key1", "Test Error 2");
+            modelState.AddModelError("key2", "Test Error 3");
+            var serializableError = new SerializableError(modelState);
+            var outputStream = new MemoryStream();
+
+            // Act
+            using (var xmlWriter = XmlWriter.Create(outputStream))
+            {
+                var dataContractSerializer = new DataContractSerializer(typeof(SerializableErrorWrapper));
+                dataContractSerializer.WriteObject(xmlWriter, new SerializableErrorWrapper(serializableError));
+            }
+            outputStream.Position = 0;
+            var res = new StreamReader(outputStream, Encoding.UTF8).ReadToEnd();
+
+            // Assert
+            Assert.Equal("<?xml version=\"1.0\" encoding=\"utf-8\"?>" +
+                "<Error><key1>Test Error 1 Test Error 2</key1><key2>Test Error 3</key2></Error>", res);
+        }
     }
 }

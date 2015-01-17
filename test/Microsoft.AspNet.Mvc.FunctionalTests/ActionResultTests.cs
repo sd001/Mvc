@@ -2,14 +2,11 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System;
-using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
-using System.Web.Http;
-using System.Xml.Serialization;
 using ActionResultsWebSite;
 using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.TestHost;

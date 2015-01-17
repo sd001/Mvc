@@ -75,7 +75,7 @@ namespace Microsoft.AspNet.Mvc.Xml
 
                 var type = GetSerializableType(context.DeclaredType, runtimeType);
                 var xmlSerializer = CreateSerializer(type);
-                var responseObject = GetWrappedSerializableErrorObject(context.Object);
+                var responseObject = SerializableErrorWrapper.WrapSerializableErrorObject(context.Object);
                 xmlSerializer.Serialize(xmlWriter, responseObject);
             }
 

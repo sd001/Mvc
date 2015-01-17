@@ -17,7 +17,7 @@ namespace XmlFormattersWebSite.Controllers
             {
                 throw new Exception("Error in executing the action");
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 exception = ex;
             }
@@ -31,7 +31,7 @@ namespace XmlFormattersWebSite.Controllers
         [HttpPost]
         public IActionResult LogErrors([FromBody] SerializableError serializableError)
         {
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 return HttpBadRequest(ModelState);
             }
